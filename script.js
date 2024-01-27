@@ -1,10 +1,11 @@
 //model
 var pokemons = [];
 
-// window.onload = () => {
+window.onload = () => {
   const select = document.querySelector("#select");
 
   fetch("https://pokeapi.co/api/v2/type/")
+
     .then((response) => response.json())
 
     .then((parsedResponse) => {
@@ -21,54 +22,114 @@ var pokemons = [];
         select.append(option);
       }
 
-      fetchPokeType(pokeTypesArr);
+      getPokemonsObjsArr();
     });
-// };
+};
 
 
-// for fetching types of pokemons
-function fetchPokeType(pokeTypesArr) {
-  pokeTypesArr.forEach((pokeTypeObj) => {
-    var pokeType = pokeTypeObj.name;
+function getPokemonsObjsArr() {
 
-    // fetch url of each type
-    fetch(pokeTypeObj.url)
-      .then((response) => response.json())
+    fetch ('https://pokeapi.co/api/v2/pokemon?offset=0&limit=1300')
+    .then((response) => response.json())
+    .then((parsedResponse) => {
+        const pokemonsObjsArr = parsedResponse.results;
+        fetchPokemonsData(pokemonsObjsArr);
+    })
 
-      .then((parsedResponse) => {
-        const pokemonsArr = parsedResponse.pokemon;
-        fetchPokemons(pokemonsArr, pokeType);
-      });
-  });
 }
 
-// for fetching pokemons from each type
-function fetchPokemons(pokemonsArr, pokeType) {
-  // traverse on 10 pokemons
-  pokemonsArr.forEach(async (pokemon, idx) => {
-    const url = pokemon.pokemon.url;
-    if (idx < 10) {
-      //  fetch for 10 pokemons of each type
-      
-      fetch(url)
-        .then((res) => res.json())
+function fetchPokemonsData (pokemonsObjsArr) {
 
-        //adding each pokemon data to model
+    pokemonsObjsArr.forEach((pokemonObj) => {
+        const url = pokemonObj.url;
+
+        fetch(url)
+        .then(res => res.json())
+
         .then((parsedRes) => {
-          pokemons.push({
-            id: parsedRes.id,
-            image: parsedRes.sprites.front_default,
-            name: parsedRes.name,
-            type: pokeType,
-            abilities: parsedRes.abilities,
-            // color:
-          });
-        });
-    }
-  });
+            pokemons.push({
+                id: parsedRes.id,
+                image: parsedRes.sprites.front_default,
+                name: parsedRes.name,
+                // type: pokeType,
+                abilities: parsedRes.abilities,
+                // color:
+            })
+        })
+    })
 
-  console.log(pokemons);
 }
+
+
+
+
+
+
+// updated code..................................
+
+
+// // for fetching types of pokemons
+// function fetchPokeType(pokeTypesArr) {
+//   pokeTypesArr.forEach((pokeTypeObj) => {
+//     var pokeType = pokeTypeObj.name;
+
+//     // fetch url of each type
+//     fetch(pokeTypeObj.url)
+//       .then((response) => response.json())
+
+//       .then((parsedResponse) => {
+//         const pokemonsArr = parsedResponse.pokemon;
+//         fetchPokemons(pokemonsArr, pokeType);
+//       });
+//   });
+// }
+
+
+// // for fetching pokemons from each type
+// function fetchPokemons(pokemonsArr, pokeType) {
+
+//   // traverse on 10 pokemons
+//   pokemonsArr.forEach(async (pokemon, idx) => {
+
+//     if (idx < 10) {
+//       const url = pokemon.pokemon.url;
+
+//       //  fetch for 10 pokemons of each type
+//       fetch(url)
+//         .then((res) => res.json())
+
+//         //adding each pokemon data to model
+//         .then((parsedRes) => {
+
+//           pokemons.push({
+//             id: parsedRes.id,
+//             image: parsedRes.sprites.front_default,
+//             name: parsedRes.name,
+//             type: pokeType,
+//             abilities: parsedRes.abilities,
+//             // color:
+//           })
+
+//         })
+//     }
+
+//   })
+
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /////lokesh sirrrr
 
@@ -86,6 +147,16 @@ function fetchPokemons(pokemonsArr, pokeType) {
 //                     abilities: pokeData.abilities,
 //                     // color:
 //           })
+
+
+
+
+
+
+
+
+
+
 
 //     .then((pokeTypesArr) => {
 //       // traverse on types
